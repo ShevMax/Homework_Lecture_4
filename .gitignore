@@ -1,0 +1,10 @@
+﻿# шаблон для ДЗ к лекции №3 AT_School
+
+/.idea
+/.allure
+/target
+/build
+/allure-results
+/out
+*.iml
+*.log

@@ -1,31 +1,41 @@
 package PageObject.PageFunctions;
 
+import PageObject.PageElement.LoginPage;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
-import com.codeborne.selenide.Condition;
-import io.qameta.allure.Step;
-import org.junit.jupiter.api.Assertions;
-import java.time.Duration;
-
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Condition.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static utils.Configuration.getConfigurationValue;
-import static PageObject.PageElement.LoginPage.*;
 
 
-public class LoginPageFunction {
+public class LoginPageFunction extends LoginPage {
 
-    @Step("Открываем страницу по ссылке {jiraUrl}")
-    public static void openPage(String url) {
-        open(url);
+    @When("^в поле Логин ввести: (.*)$")
+    public void loginMethod(String login) {
+        loginField.shouldBe(visible).sendKeys(login);
     }
 
-    @Step("Авторизуемся в системе под пользователем {login}")
-    public static void authorization(String login) {
-        loginField.shouldBe(visible).sendKeys(getConfigurationValue("login"));
-        passwordField.sendKeys(getConfigurationValue("password"));
-        inputButton.shouldBe(Condition.enabled).click();
-        //String elementValue = forAssert.shouldBe(visible,Duration.ofSeconds(60) ).getText();
-        //Assertions.assertEquals(elementValue, "System Dashboard", "Ошибка ввода");
+    @And("^в поле Пароль ввести: (.*)$")
+    public void passwordMethod(String password) {
+        passwordField.sendKeys(password);
+    }
 
+    @And("^далее нажать кнопку Войти$")
+    public void pressInputButton () {
+        inputButton.shouldBe(enabled).click();
+    }
+
+    @Then("^из Профиля пользователя извлекается текущее имя пользователя")
+    public String getCurrentUsername() {
+        return currentUsername.shouldHave(attribute("data-username")).attr("data-username");
+    }
+
+    @And("^сравниватеся с ранее введённым значением login, что является проверкой успешности авторизации$")
+    public void checkAuthorizationSuccessful() {
+        assertTrue(currentUsername.is(visible));
+        assertEquals(getConfigurationValue("login"), getCurrentUsername());
     }
 }

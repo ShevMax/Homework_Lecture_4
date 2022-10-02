@@ -1,12 +1,11 @@
 package StepDefinition;
 
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.junit.Assert;
 
-
-public class CalculatorTestSteps extends Calculator {
+public class CalculatorTestSteps {
     private Calculator calculator;
     double x;
     double y;
@@ -17,18 +16,15 @@ public class CalculatorTestSteps extends Calculator {
         this.x = x;
         this.y = y;
         this.calculator = new Calculator();
-    throw new io.cucumber.java.PendingException();
     }
 
     @Then("^Вычисляем сумму двух чисел$")
     public void  sumOfTwoNumbers() {
         total = calculator.sum(x, y);
-    throw new io.cucumber.java.PendingException();
     }
 
     @When("^Результат должен быть равен (\\d)$")
-    public void resultIsEqualTo(double res) {
-        Assert.assertEquals(res, total, 0.0001);
-    throw new io.cucumber.java.PendingException();
+    public void resultIsEqualTo(double result) {
+        Assert.assertEquals(result, total, 0);
     }
 }
